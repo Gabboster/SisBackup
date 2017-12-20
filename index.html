@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Operations in a dynamic tree</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="stylesheet" href="jquery/jquery-tree/dist/themes/default/style.min.css">
+    <script src="jquery/jquery.min.js"></script>
+    <script src="jquery/jquery-tree/dist/jstree.min.js"></script>
+    <script src="node.js/pg-structure.js"></script>
+  </head>
+    <body>
+      <form id="s" method="POST" action="/">
+        <input type="search" id="q" name="q"/>
+        <button type="submit">Search</button>
+      </form>
+
+      <div id="container">
+        
+      </div>
+      <script>
+          var input = document.getElementById('#q');
+          input.value = "hi";
+
+          function jstree() {
+              var colunas = rows;
+              
+            $('#container').jstree({
+                'core' : {
+                    'data' : colunas              
+                },
+                "plugins" : ["search", "checkbox", "sort"]   
+            });
+            $("#s").submit(function(e) {
+                e.preventDefault();
+                $("#container").jstree(true).search($("#q").val());
+            });        
+          };            
+      </script>
+    </body>
+  </html>
