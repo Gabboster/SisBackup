@@ -1,0 +1,73 @@
+doctype html
+html
+  head
+    title Operations in a dynamic tree
+    |     
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    |     
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    |     
+    link(rel='stylesheet', href='/jquery/jquery-tree/dist/themes/default/style.min.css')
+    |     
+    script(src='/jquery/jquery.min.js')
+    |     
+    script(src='/jquery/jquery-tree/dist/jstree.min.js')
+    |
+    script(src='/../node_modules/socket.io-client/dist/socket.io.js')
+    |     
+  body
+    form#s
+      input#q(type='search', name='q')
+      |
+      button(type='submit') Search
+    |       
+    #jstree  
+      
+    //- for(var i = 0; i < queryRows.length; i++){
+      p= queryRows[i]
+    //- }
+    |
+  script.
+    var socket = io();
+    $(function () {
+      $.jstree.defaults.core.themes.variant = "large";
+      
+      $("#s").submit(function(e){
+        socket.emit('search', $('#q').val());
+        e.preventDefault();
+      });
+
+      socket.on('searchRes', function(data){
+        $("#jstree").jstree({
+          'core' : {
+            'data' : [data],   
+          },
+          "checkbox" : {
+            "keep_selected_style" : false
+          },
+          "plugins" : ["search", "checkbox", "sort", "wholerow"]
+        });    
+        $('#jstree').jstree(true).settings.core.data = [data];
+        $('#jstree').jstree(true).refresh();
+      });
+    });
+    /*
+    var socket = io();
+    $(function (){
+      $('#s').on('submit',function (e){
+        socket.emit('search', $('#q').val());
+        $('li').html('');
+        e.preventDefault();
+      });
+
+      socket.on('searchRes', function(data){
+          $('li').html(data);
+        })
+    });
+    [{
+  
+    "id":1,"text":"Root node","children":[
+    {"id":2,"text":"Child node 1","children":true},
+    {"id":3,"text":"Child node 2"}]
+    }]
+    */  
